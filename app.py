@@ -103,16 +103,13 @@ def search_venues():
 def show_venue(venue_id):
   # shows the venue page with the given venue_id
   venue = Venue.query.get(venue_id)
-  shows = Show.query.filter_by(venue_id=venue_id).all()
+  shows = venue.shows
   past_shows = []
   upcoming_shows = []
   current_time = datetime.now()
-
   for show in shows:
-    upcoming_shows = db.session.query(Show).join(Artist).filter(Show.venue_id==venue_id).filter(Show.start_time>datetime.now()).all()
-    past_shows = db.session.query(Show).join(Artist).filter(Show.venue_id==venue_id).filter(Show.start_time<datetime.now()).all()
     data = {
-          "artist_id": show.artist_id,
+          "artist_id": show.artist.id,
           "artist_name": show.artist.name,
            "artist_image_link": show.artist.image_link,
            "start_time": format_datetime(str(show.start_time))
